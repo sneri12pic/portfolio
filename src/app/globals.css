@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  background: #fff8f3;
+  color: #2d2523;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(243, 215, 208, 0.65), transparent 34rem),
+    linear-gradient(180deg, #fff8f3 0%, #f9efe9 48%, #fff8f3 100%);
+  color: #2d2523;
+}
+
+::selection {
+  background: #f3d7d0;
+  color: #2d2523;
+}
+
+a,
+button,
+input,
+textarea {
+  outline-offset: 4px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(200, 117, 120, 0.55);
+  outline-offset: 4px;
+}
+
+.pdf-preview {
+  min-height: 76vh;
+}
