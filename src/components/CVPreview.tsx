@@ -1,5 +1,6 @@
 import { Download, ExternalLink } from "lucide-react";
 import { Button } from "@/components/Button";
+import { PdfCanvasPreview } from "@/components/PdfCanvasPreview";
 import type { CvKey } from "@/data/cv";
 import { cvs } from "@/data/cv";
 
@@ -27,23 +28,7 @@ export function CVPreview({ cvKey }: { cvKey: CvKey }) {
       </header>
 
       <section className="mt-10 rounded-2xl border border-petal bg-white/82 p-4 shadow-card">
-        <div className="block md:hidden">
-          <p className="text-sm leading-6 text-warm-gray">
-            PDF previews can be awkward on small screens. Use the buttons above to open
-            or download the CV directly.
-          </p>
-        </div>
-        <object
-          data={cv.previewPath}
-          type="application/pdf"
-          aria-label={`${cv.title} PDF preview`}
-          className="pdf-preview hidden w-full rounded-xl border border-petal bg-cream md:block"
-        >
-          <div className="p-8 text-center text-sm leading-6 text-warm-gray">
-            The PDF preview could not be loaded. Use the open or download button
-            above, or replace the file in public/cv with the same filename.
-          </div>
-        </object>
+        <PdfCanvasPreview filePath={cv.previewPath} title={cv.title} />
       </section>
     </div>
   );
