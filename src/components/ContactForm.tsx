@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
-import { Send } from "lucide-react";
+import { Check, Copy, Mail, Send } from "lucide-react";
 import { Button } from "@/components/Button";
 import { contact, cn } from "@/lib/utils";
 
@@ -24,12 +24,27 @@ const initialState: FormState = {
 export function ContactForm() {
   const [form, setForm] = useState<FormState>(initialState);
   const [errors, setErrors] = useState<FormErrors>({});
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<"idle" | "copied" | "opened">("idle");
+
+  const emailBody = useMemo(() => {
+    return `Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`;
+  }, [form]);
 
   const mailto = useMemo(() => {
-    const body = `Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`;
-    return `mailto:${contact.email}?subject=${encodeURIComponent(form.subject)}&body=${encodeURIComponent(body)}`;
-  }, [form]);
+    return `mailto:${contact.email}?subject=${encodeURIComponent(form.subject)}&body=${encodeURIComponent(emailBody)}`;
+  }, [emailBody, form.subject]);
+
+  const gmailCompose = useMemo(() => {
+    const params = new URLSearchParams({
+      view: "cm",
+      fs: "1",
+      to: contact.email,
+      su: form.subject,
+      body: emailBody
+    });
+
+    return `https://mail.google.com/mail/?${params.toString()}`;
+  }, [emailBody, form.subject]);
 
   function validate() {
     const nextErrors: FormErrors = {};
@@ -49,9 +64,24 @@ export function ContactForm() {
     event.preventDefault();
     if (!validate()) return;
 
-    // TODO: Replace this mailto fallback with a Vercel serverless function or email provider when production email sending is configured.
     window.location.href = mailto;
-    setSubmitted(true);
+    setStatus("opened");
+  }
+
+  function handleOpenGmail() {
+    if (!validate()) return;
+
+    window.open(gmailCompose, "_blank", "noopener,noreferrer");
+    setStatus("opened");
+  }
+
+  async function handleCopyMessage() {
+    if (!validate()) return;
+
+    await navigator.clipboard.writeText(
+      `To: ${contact.email}\nSubject: ${form.subject}\n\n${emailBody}`
+    );
+    setStatus("copied");
   }
 
   return (
@@ -124,15 +154,24 @@ export function ContactForm() {
         <Button type="submit">
           <Send aria-hidden size={17} /> Send with email app
         </Button>
-        {submitted ? (
-          <p className="text-sm font-semibold text-clay">
-            Your email client should open with the message prefilled.
-          </p>
-        ) : (
-          <p className="text-sm text-warm-gray">
-            This first version uses a mailto fallback and does not expose secrets.
-          </p>
-        )}
+        <Button type="button" variant="secondary" onClick={handleOpenGmail}>
+          <Mail aria-hidden size={17} /> Open in Gmail
+        </Button>
+        <Button type="button" variant="ghost" onClick={handleCopyMessage}>
+          {status === "copied" ? (
+            <Check aria-hidden size={17} />
+          ) : (
+            <Copy aria-hidden size={17} />
+          )}
+          Copy message
+        </Button>
+        <p className="text-sm text-warm-gray">
+          {status === "copied"
+            ? "Message copied. Paste it into any email app."
+            : status === "opened"
+              ? "Your email app should open with the message prefilled."
+              : "No backend is connected yet, so this prepares an email for you to send."}
+        </p>
       </div>
     </form>
   );

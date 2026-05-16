@@ -24,7 +24,7 @@ export default function ContactPage() {
         <SectionHeading
           eyebrow="Contact"
           title="Talk about a role or opportunity"
-          text="The fastest route is email. The form below opens your email client with the message prefilled, so no secrets or paid services are required for this first version."
+          text="The fastest route is email. The form below prepares a message for your email app, Gmail, or clipboard without exposing any private sending keys."
         />
         <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
           <aside className="rounded-2xl border border-petal bg-white/82 p-6 shadow-card">
