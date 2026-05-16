@@ -45,40 +45,6 @@ Optional TypeScript check:
 npm run typecheck
 ```
 
-## Deploy to Vercel
-
-1. Push this repository to GitHub.
-2. Sign in to Vercel.
-3. Choose **Add New Project**.
-4. Import the GitHub repository.
-5. Keep the framework preset as **Next.js**.
-6. Deploy.
-
-No environment variables are required for the first version.
-
-## Connect `stepandemianenko.dev`
-
-The domain `stepandemianenko.dev` has already been purchased.
-
-1. Deploy the project to Vercel first.
-2. In Vercel, open **Project Settings -> Domains**.
-3. Add `stepandemianenko.dev`.
-4. Add `www.stepandemianenko.dev`.
-5. Configure the DNS records shown by Vercel.
-6. If using Namecheap BasicDNS, update records in **Namecheap -> Advanced DNS**.
-7. Do not rely on Namecheap URL forwarding for the production site.
-8. Wait for DNS propagation.
-9. Verify HTTPS works.
-10. Use `stepandemianenko.dev` as the primary domain.
-
-Recommended final redirect:
-
-```text
-www.stepandemianenko.dev -> stepandemianenko.dev
-```
-
-Configure the redirect in Vercel after both domains are added and verified.
-
 ## Replace CV Files
 
 Add or replace these files:
