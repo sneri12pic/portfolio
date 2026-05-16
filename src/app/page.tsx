@@ -29,7 +29,7 @@ const roles = [
     title: "Software Engineer",
     summary:
       "Broad graduate engineering evidence across backend APIs, Android development, databases, CI/CD, and product-minded delivery.",
-    skills: ["TypeScript", "Python", "Java", "Kotlin", "CI/CD"],
+    skills: ["Python", "Java", "Kotlin", "CI/CD"],
     href: "/software-engineer",
     cvHref: "/cv/software-engineer"
   },
