@@ -22,6 +22,15 @@ export const metadata: Metadata = {
   title: "Stepan Demianenko | Graduate Software Engineer",
   description:
     "Graduate software engineering portfolio for Stepan Demianenko, focused on backend APIs, Android applications, and reliable full-stack systems.",
+  icons: {
+    icon: [
+      {
+        url: "/iconPortfolioWeb.jpg",
+        type: "image/jpeg"
+      }
+    ],
+    shortcut: "/iconPortfolioWeb.jpg"
+  },
   openGraph: {
     title: "Stepan Demianenko | Graduate Software Engineer",
     description:
