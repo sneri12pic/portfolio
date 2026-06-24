@@ -1,19 +1,29 @@
 "use client";
 
-import { useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { X } from "lucide-react";
 import type { Project } from "@/data/projects";
 
 export function ProjectMedia({ project }: { project: Project }) {
   const shouldReduceMotion = useReducedMotion();
   const [brokenImages, setBrokenImages] = useState<Set<string>>(new Set());
   const [videoFailed, setVideoFailed] = useState(false);
+  const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
 
   const visibleScreenshots = project.screenshots.filter(
     (screenshot) => !brokenImages.has(screenshot.src)
   );
 
+  useEffect(() => {
+    if (!lightbox) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setLightbox(null);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lightbox]);
+
   return (
+    <>
     <section className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
       <div className="rounded-2xl border border-petal bg-white/82 p-4 shadow-card">
         <div className="grid gap-4 sm:grid-cols-2">
@@ -22,12 +32,13 @@ export function ProjectMedia({ project }: { project: Project }) {
               <motion.figure
                 key={screenshot.src}
                 whileHover={shouldReduceMotion ? {} : { scale: 1.015 }}
-                className="overflow-hidden rounded-2xl border border-petal bg-cream"
+                onClick={() => setLightbox(screenshot)}
+                className="flex cursor-zoom-in items-center justify-center overflow-hidden rounded-2xl border border-petal bg-cream"
               >
                 <img
                   src={screenshot.src}
                   alt={screenshot.alt}
-                  className="aspect-[4/3] w-full object-cover"
+                  className="max-h-[30rem] w-full object-contain"
                   onError={() =>
                     setBrokenImages((current) => new Set(current).add(screenshot.src))
                   }
@@ -49,7 +60,7 @@ export function ProjectMedia({ project }: { project: Project }) {
       <div className="rounded-2xl border border-petal bg-white/82 p-4 shadow-card">
         {project.videoDemo && !videoFailed ? (
           <video
-            className="aspect-video w-full rounded-2xl border border-petal bg-cream object-cover"
+            className="max-h-[32rem] w-full rounded-2xl border border-petal bg-cream object-contain"
             controls
             preload="metadata"
             onError={() => setVideoFailed(true)}
@@ -80,5 +91,36 @@ export function ProjectMedia({ project }: { project: Project }) {
         )}
       </div>
     </section>
+
+    <AnimatePresence>
+      {lightbox && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => setLightbox(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label={lightbox.alt}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-charcoal/80 p-4 backdrop-blur-sm sm:p-8"
+        >
+          <button
+            type="button"
+            onClick={() => setLightbox(null)}
+            aria-label="Close image"
+            className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+          >
+            <X aria-hidden size={22} />
+          </button>
+          <img
+            src={lightbox.src}
+            alt={lightbox.alt}
+            onClick={(e) => e.stopPropagation()}
+            className="max-h-full max-w-full cursor-default rounded-2xl object-contain shadow-card"
+          />
+        </motion.div>
+      )}
+    </AnimatePresence>
+    </>
   );
 }
