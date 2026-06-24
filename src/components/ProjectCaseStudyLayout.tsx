@@ -2,7 +2,6 @@ import { ExternalLink, Github } from "lucide-react";
 import type { Project } from "@/data/projects";
 import { Button } from "@/components/Button";
 import { ProjectMedia } from "@/components/ProjectMedia";
-import { SectionHeading } from "@/components/SectionHeading";
 import { TechTag } from "@/components/TechTag";
 
 export function ProjectCaseStudyLayout({ project }: { project: Project }) {
@@ -65,7 +64,10 @@ export function ProjectCaseStudyLayout({ project }: { project: Project }) {
       </section>
 
       <section className="mt-16">
-        <SectionHeading title="Technical Details" text="The important implementation choices and trade-offs behind the project." />
+        <h2 className="font-display text-3xl font-semibold text-charcoal">Technical Details</h2>
+        <p className="mb-6 mt-3 text-base leading-7 text-warm-gray">
+          The important implementation choices and trade-offs behind the project.
+        </p>
         <ul className="grid gap-3 text-sm leading-6 text-warm-gray">
           {project.technicalDetails.map((detail) => (
             <li key={detail} className="flex gap-3">
