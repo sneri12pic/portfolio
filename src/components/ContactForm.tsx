@@ -1,7 +1,7 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
-import { Check, Copy, Mail, Send } from "lucide-react";
+import { FormEvent, useState } from "react";
+import { Check, Copy, Send } from "lucide-react";
 import { Button } from "@/components/Button";
 import { contact, cn } from "@/lib/utils";
 
@@ -21,30 +21,15 @@ const initialState: FormState = {
   message: ""
 };
 
+// Public access key from web3forms.com — safe to expose client-side.
+const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
+
 export function ContactForm() {
   const [form, setForm] = useState<FormState>(initialState);
   const [errors, setErrors] = useState<FormErrors>({});
-  const [status, setStatus] = useState<"idle" | "copied" | "opened">("idle");
-
-  const emailBody = useMemo(() => {
-    return `Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`;
-  }, [form]);
-
-  const mailto = useMemo(() => {
-    return `mailto:${contact.email}?subject=${encodeURIComponent(form.subject)}&body=${encodeURIComponent(emailBody)}`;
-  }, [emailBody, form.subject]);
-
-  const gmailCompose = useMemo(() => {
-    const params = new URLSearchParams({
-      view: "cm",
-      fs: "1",
-      to: contact.email,
-      su: form.subject,
-      body: emailBody
-    });
-
-    return `https://mail.google.com/mail/?${params.toString()}`;
-  }, [emailBody, form.subject]);
+  const [status, setStatus] = useState<
+    "idle" | "submitting" | "success" | "error" | "copied"
+  >("idle");
 
   function validate() {
     const nextErrors: FormErrors = {};
@@ -60,26 +45,45 @@ export function ContactForm() {
     return Object.keys(nextErrors).length === 0;
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!validate()) return;
+    if (!ACCESS_KEY) {
+      setStatus("error");
+      return;
+    }
 
-    window.location.href = mailto;
-    setStatus("opened");
-  }
-
-  function handleOpenGmail() {
-    if (!validate()) return;
-
-    window.open(gmailCompose, "_blank", "noopener,noreferrer");
-    setStatus("opened");
+    setStatus("submitting");
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: ACCESS_KEY,
+          name: form.name,
+          email: form.email,
+          subject: form.subject,
+          message: form.message,
+          // surfaced as the email's reply-to so you can reply directly
+          replyto: form.email
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setStatus("success");
+        setForm(initialState);
+      } else {
+        setStatus("error");
+      }
+    } catch {
+      setStatus("error");
+    }
   }
 
   async function handleCopyMessage() {
     if (!validate()) return;
-
     await navigator.clipboard.writeText(
-      `To: ${contact.email}\nSubject: ${form.subject}\n\n${emailBody}`
+      `To: ${contact.email}\nSubject: ${form.subject}\n\nName: ${form.name}\nEmail: ${form.email}\n\n${form.message}`
     );
     setStatus("copied");
   }
@@ -151,11 +155,13 @@ export function ContactForm() {
         </div>
       </div>
       <div className="mt-6 flex flex-wrap items-center gap-4">
-        <Button type="submit">
-          <Send aria-hidden size={17} /> Send with email app
-        </Button>
-        <Button type="button" variant="secondary" onClick={handleOpenGmail}>
-          <Mail aria-hidden size={17} /> Open in Gmail
+        <Button
+          type="submit"
+          disabled={status === "submitting"}
+          className="disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          <Send aria-hidden size={17} />
+          {status === "submitting" ? "Sending…" : "Send message"}
         </Button>
         <Button type="button" variant="ghost" onClick={handleCopyMessage}>
           {status === "copied" ? (
@@ -165,12 +171,19 @@ export function ContactForm() {
           )}
           Copy message
         </Button>
-        <p className="text-sm text-warm-gray">
-          {status === "copied"
-            ? "Message copied. Paste it into any email app."
-            : status === "opened"
-              ? "Your email app should open with the message prefilled."
-              : "No backend is connected yet, so this prepares an email for you to send."}
+        <p
+          className={cn(
+            "text-sm",
+            status === "error" ? "text-rose" : "text-warm-gray"
+          )}
+        >
+          {status === "success"
+            ? "Thanks — your message was sent. I'll reply to your email soon."
+            : status === "copied"
+              ? "Message copied. Paste it into any email app."
+              : status === "error"
+                ? `Sending failed. Please email me directly at ${contact.email}.`
+                : "Fill in the form and your message will be sent straight to my inbox."}
         </p>
       </div>
     </form>
