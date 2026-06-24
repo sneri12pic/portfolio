@@ -66,16 +66,14 @@ export function ProjectCaseStudyLayout({ project }: { project: Project }) {
 
       <section className="mt-16">
         <SectionHeading title="Technical Details" text="The important implementation choices and trade-offs behind the project." />
-        <div className="grid gap-5 md:grid-cols-2">
+        <ul className="grid gap-3 text-sm leading-6 text-warm-gray">
           {project.technicalDetails.map((detail) => (
-            <div
-              key={detail}
-              className="rounded-2xl border border-petal bg-white/82 p-5 text-sm leading-6 text-warm-gray shadow-card"
-            >
-              {detail}
-            </div>
+            <li key={detail} className="flex gap-3">
+              <span aria-hidden className="mt-2 h-2 w-2 rounded-full bg-clay" />
+              <span>{detail}</span>
+            </li>
           ))}
-        </div>
+        </ul>
       </section>
 
       <section className="mt-16 grid gap-8 lg:grid-cols-2">
