@@ -23,8 +23,9 @@ export default function SoftwareEngineerPage() {
         title="Graduate Software Engineer"
         heroText="I build practical software across backend APIs, Android applications, databases, and CI/CD workflows, with a focus on maintainable systems and user-focused engineering."
         emphasis={[
-          "backend APIs",
-          "Android development",
+          "REST APIs",
+          "FastAPI",
+          "Android",
           "system design fundamentals",
           "CI/CD",
           "product-minded thinking"
