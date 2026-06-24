@@ -80,14 +80,19 @@ export const projects: Project[] = [
     screenshots: [
       {
         src: "/images/projects/fitness-app-1.png",
-        alt: "Fitness app workout logging screen placeholder"
+        alt: "Fitness app home screen with routine and daily activity"
       },
       {
         src: "/images/projects/fitness-app-2.png",
-        alt: "Fitness app progress feedback screen placeholder"
+        alt: "Fitness app workout logging screen"
+      },
+      {
+        src: "/images/projects/fitness-app-3.png",
+        alt: "Fitness app progress overview screen"
       }
     ],
-    videoDemo: "/demos/fitness-app-demo.mp4",
+    videoDemo: "/demos/sdtFitnessApp.mp4",
+    repoUrl: "https://github.com/sneri12pic/sdt-fitness-app",
     featuredFor: ["software", "backend", "android"],
     status: "Research-informed Android prototype"
   },
@@ -138,6 +143,7 @@ export const projects: Project[] = [
         alt: "Okta dashboard backend architecture placeholder"
       }
     ],
+    repoUrl: "https://github.com/sneri12pic/okta-dashboard-back",
     featuredFor: ["software", "backend", "android"],
     status: "Backend portfolio project"
   },
@@ -190,10 +196,11 @@ export const projects: Project[] = [
     ],
     screenshots: [
       {
-        src: "/images/projects/system-architecture-1.png",
-        alt: "Microservices system architecture placeholder"
+        src: "/images/projects/systemArchitectureCW.png",
+        alt: "Java Spring Boot microservices system architecture diagram"
       }
     ],
+    repoUrl: "https://github.com/sneri12pic/SystemArchitecture",
     featuredFor: ["software", "backend", "android"],
     status: "System architecture project"
   },
@@ -240,8 +247,113 @@ export const projects: Project[] = [
         alt: "Music and Notes PDF viewer placeholder"
       }
     ],
+    repoUrl: "https://github.com/sneri12pic/Music-And-Notes",
     featuredFor: ["software", "backend", "android"],
     status: "Supporting full-stack project"
+  },
+  {
+    slug: "midas-core",
+    title: "Midas Core Transaction Service",
+    subtitle:
+      "Spring Boot microservice processing Kafka transactions for the JPMorgan Chase Forage program.",
+    shortDescription:
+      "A Spring Boot transaction-processing microservice that consumes money-transfer events from Kafka, validates them against persisted balances, applies an incentive from an external REST API, and exposes balances over HTTP.",
+    longDescription:
+      "Midas Core is a Spring Boot service built for JPMorgan Chase's Advanced Software Engineering job simulation on Forage. It consumes money-transfer transactions from Kafka, validates them against persisted user balances, applies an incentive returned by an external REST API, persists the result, and serves user balances over HTTP.",
+    roleRelevance: {
+      software:
+        "Shows event-driven service design, validation rules, persistence, and integration with an external API across a realistic transaction workflow.",
+      backend:
+        "Strong backend evidence: Spring Boot, Kafka consumers, Spring Data JPA, REST integration, and staged test coverage.",
+      android:
+        "Demonstrates the backend transaction systems and API contracts that financial mobile apps depend on."
+    },
+    techStack: [
+      "Java",
+      "Spring Boot",
+      "Kafka",
+      "Spring Data JPA",
+      "REST APIs",
+      "Maven"
+    ],
+    highlights: [
+      "Kafka consumer deserialises and validates money-transfer transactions.",
+      "Validates sender, recipient, amount, and balance before processing.",
+      "Calls an external incentive REST API and applies the returned incentive.",
+      "Persists results with Spring Data JPA entities and repositories.",
+      "Exposes GET /balance?userId={id} over HTTP.",
+      "Staged test suites (TaskOne–TaskFive) cover each stage of the simulation."
+    ],
+    problem:
+      "A transaction-processing service needs to reliably validate incoming money transfers, apply business incentives, and keep balances consistent while integrating with messaging and external APIs.",
+    solution:
+      "Midas Core consumes transactions from Kafka, enforces validation rules, applies incentives from a REST API, persists balance changes, and exposes balances via an HTTP endpoint.",
+    technicalDetails: [
+      "Built a TransactionListener Kafka consumer that validates each transaction and updates balances.",
+      "Processed a transaction only if the sender and recipient exist, the amount is positive, and the balance covers it.",
+      "On success applied sender -= amount and recipient += amount + incentive, then saved a TransactionRecord.",
+      "Used JPA entities (UserRecord, TransactionRecord) with Spring Data repositories.",
+      "Integrated an external incentive API running locally and exposed balances through BalanceController."
+    ],
+    outcomes: [
+      "Completed all five stages of the JPMorgan Chase Advanced Software Engineering simulation.",
+      "Produced clear backend evidence for event-driven processing, validation, and persistence."
+    ],
+    screenshots: [
+      {
+        src: "/images/projects/midas-core-1.png",
+        alt: "Midas Core transaction service architecture diagram"
+      }
+    ],
+    repoUrl: "https://github.com/sneri12pic/forage-midas",
+    featuredFor: ["software", "backend"],
+    status: "JPMorgan Chase Forage backend project"
+  },
+  {
+    slug: "secure-dev",
+    title: "BankWebsite Security Hardening",
+    subtitle:
+      "Identifying, exploiting, and mitigating web vulnerabilities in a Java/Jetty banking app.",
+    shortDescription:
+      "Secure software development coursework based on a vulnerable Java/Jetty banking application, demonstrating how common web vulnerabilities can be exploited and then mitigated without breaking functionality.",
+    longDescription:
+      "A secure development project built on the vulnerable BankWebsite Java/Jetty application. It demonstrates how common web vulnerabilities can be exploited, then mitigated, across login, account management, balance transfers, and an admin-only password reset workflow — while preserving normal banking functionality.",
+    roleRelevance: {
+      software:
+        "Shows security awareness across realistic application features: spotting flaws, fixing root causes, and re-testing without regressing behaviour.",
+      backend:
+        "Backend security evidence around authentication, authorisation, parameter tampering, and safe data handling in a Java web app.",
+      android:
+        "Demonstrates the secure-by-design thinking that carries over to protecting mobile app backends and APIs."
+    },
+    techStack: ["Java", "Jetty", "Servlets", "SQL", "Web Security"],
+    highlights: [
+      "Hardened a vulnerable Java/Jetty banking application.",
+      "Demonstrated and fixed Hidden Form Field Trust / parameter tampering in the transfer flow.",
+      "Demonstrated and fixed Missing Authentication for a critical function (admin password reset).",
+      "Followed a show-exploit-fix-retest-verify structure for each vulnerability.",
+      "Focused on removing root causes rather than blocking single payloads.",
+      "Preserved original banking functionality after each mitigation."
+    ],
+    problem:
+      "Banking-style web applications expose login, transfers, and admin workflows that are easy to get subtly wrong, leaving exploitable security flaws inside normal-looking functionality.",
+    solution:
+      "The project exploited each vulnerability to prove the risk, then applied secure fixes that addressed the underlying flaw and re-tested to confirm both mitigation and preserved functionality.",
+    technicalDetails: [
+      "Analysed the BankWebsite servlets for login, account, transfer, customer listing, and admin password reset.",
+      "Identified parameter tampering via trusted hidden form fields in the transfer confirmation flow.",
+      "Identified a critical function (admin password reset) missing proper authentication.",
+      "Applied server-side validation and authentication checks to remove the root causes.",
+      "Re-ran the original attacks to confirm mitigation and verified normal banking flows still worked."
+    ],
+    outcomes: [
+      "Produced a clear vulnerability-to-mitigation walkthrough with before/after verification.",
+      "Created strong evidence of secure development and threat-modelling thinking."
+    ],
+    screenshots: [],
+    repoUrl: "https://github.com/sneri12pic/SecureDev",
+    featuredFor: ["software", "backend"],
+    status: "Secure development coursework"
   }
 ];
 
