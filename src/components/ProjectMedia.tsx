@@ -24,82 +24,60 @@ export function ProjectMedia({ project }: { project: Project }) {
 
   return (
     <>
-    <section className="space-y-5">
-      <div className="rounded-2xl border border-petal bg-white/82 p-4 shadow-card">
-        <div
-          className="grid gap-4"
-          style={{
-            gridTemplateColumns: `repeat(${Math.min(
-              Math.max(visibleScreenshots.length, 1),
-              3
-            )}, minmax(0, 1fr))`
-          }}
-        >
-          {visibleScreenshots.length > 0 ? (
-            visibleScreenshots.map((screenshot) => (
-              <motion.figure
-                key={screenshot.src}
-                whileHover={shouldReduceMotion ? {} : { scale: 1.015 }}
-                onClick={() => setLightbox(screenshot)}
-                className="flex cursor-zoom-in items-center justify-center overflow-hidden rounded-2xl border border-petal bg-cream"
-              >
-                <img
-                  src={screenshot.src}
-                  alt={screenshot.alt}
-                  className="max-h-[30rem] w-full object-contain"
-                  onError={() =>
-                    setBrokenImages((current) => new Set(current).add(screenshot.src))
-                  }
-                />
-              </motion.figure>
-            ))
-          ) : (
-            <div className="col-span-full flex min-h-64 items-center justify-center rounded-2xl border border-dashed border-petal bg-cream p-8 text-center">
-              <p className="max-w-md text-sm leading-6 text-warm-gray">
-                Project screenshots are ready to drop into
-                <span className="font-semibold text-clay"> public/images/projects</span>.
-                The case study will use them automatically when the filenames in
-                project data match the files.
-              </p>
+    <section className="space-y-12">
+      {visibleScreenshots.length > 0 ? (
+        <div>
+          <h2 className="mb-5 font-display text-3xl font-semibold text-charcoal">
+            Screenshots
+          </h2>
+          <div className="rounded-2xl border border-petal bg-white/82 p-4 shadow-card">
+            <div
+              className="grid gap-4"
+              style={{
+                gridTemplateColumns: `repeat(${Math.min(
+                  visibleScreenshots.length,
+                  3
+                )}, minmax(0, 1fr))`
+              }}
+            >
+              {visibleScreenshots.map((screenshot) => (
+                <motion.figure
+                  key={screenshot.src}
+                  whileHover={shouldReduceMotion ? {} : { scale: 1.015 }}
+                  onClick={() => setLightbox(screenshot)}
+                  className="flex cursor-zoom-in items-center justify-center overflow-hidden rounded-2xl border border-petal bg-cream"
+                >
+                  <img
+                    src={screenshot.src}
+                    alt={screenshot.alt}
+                    className="max-h-[30rem] w-full object-contain"
+                    onError={() =>
+                      setBrokenImages((current) => new Set(current).add(screenshot.src))
+                    }
+                  />
+                </motion.figure>
+              ))}
             </div>
-          )}
-        </div>
-      </div>
-      {project.videoDemo && !videoFailed ? (
-        <div className="mx-auto w-fit max-w-full rounded-2xl border border-petal bg-white/82 p-2 shadow-card">
-          <video
-            className="block max-h-[34rem] w-auto max-w-full rounded-xl bg-cream object-contain"
-            controls
-            preload="metadata"
-            onError={() => setVideoFailed(true)}
-          >
-            <source src={project.videoDemo} type="video/mp4" />
-          </video>
-        </div>
-      ) : (
-        <div className="rounded-2xl border border-petal bg-white/82 p-4 shadow-card">
-          <div className="flex aspect-video items-center justify-center rounded-2xl border border-dashed border-petal bg-cream p-8 text-center">
-            <p className="max-w-sm text-sm leading-6 text-warm-gray">
-              {project.videoDemo ? (
-                <>
-                  Add a demo video at
-                  <span className="font-semibold text-clay">
-                    {" "}
-                    public{project.videoDemo}
-                  </span>{" "}
-                  when it is ready. Missing media will not break the page.
-                </>
-              ) : (
-                <>
-                  No video demo is configured yet. Add one in
-                  <span className="font-semibold text-clay"> public/demos</span> and
-                  update the project data when it is ready.
-                </>
-              )}
-            </p>
           </div>
         </div>
-      )}
+      ) : null}
+      {project.videoDemo && !videoFailed ? (
+        <div>
+          <h2 className="mb-5 font-display text-3xl font-semibold text-charcoal">
+            Demo
+          </h2>
+          <div className="mx-auto w-fit max-w-full rounded-2xl border border-petal bg-white/82 p-2 shadow-card">
+            <video
+              className="block max-h-[34rem] w-auto max-w-full rounded-xl bg-cream object-contain"
+              controls
+              preload="metadata"
+              onError={() => setVideoFailed(true)}
+            >
+              <source src={project.videoDemo} type="video/mp4" />
+            </video>
+          </div>
+        </div>
+      ) : null}
     </section>
 
     <AnimatePresence>
