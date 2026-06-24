@@ -45,7 +45,8 @@ export function PdfCanvasPreview({ filePath, title }: PdfCanvasPreviewProps) {
           return;
         }
 
-        const width = Math.min(container.clientWidth, 920);
+        // ponytail: 0.7 = ~30% zoom-out from the full container width
+        const width = Math.min(container.clientWidth, 920) * 0.7;
         const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
 
         for (let pageNumber = 1; pageNumber <= pdfDocument.numPages; pageNumber += 1) {
