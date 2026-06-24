@@ -66,7 +66,7 @@ export function ProjectMedia({ project }: { project: Project }) {
           <h2 className="mb-5 font-display text-3xl font-semibold text-charcoal">
             Demo
           </h2>
-          <div className="mx-auto w-fit max-w-full rounded-2xl border border-petal bg-white/82 p-2 shadow-card">
+          <div className="w-fit max-w-full rounded-2xl border border-petal bg-white/82 p-2 shadow-card">
             <video
               className="block max-h-[34rem] w-auto max-w-full rounded-xl bg-cream object-contain"
               controls
