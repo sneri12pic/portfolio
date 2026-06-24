@@ -78,19 +78,8 @@ export function ProjectMedia({ project }: { project: Project }) {
             Demo
           </h2>
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
-            <div className="w-fit max-w-full rounded-2xl border border-petal bg-white/82 p-2 shadow-card">
-              <video
-                ref={videoRef}
-                className="block max-h-[34rem] w-auto max-w-full rounded-xl bg-cream object-contain"
-                controls
-                preload="metadata"
-                onError={() => setVideoFailed(true)}
-              >
-                <source src={project.videoDemo} type="video/mp4" />
-              </video>
-            </div>
             {project.videoChapters && project.videoChapters.length > 0 ? (
-              <div className="rounded-2xl border border-petal bg-white/82 p-3 shadow-card lg:w-64">
+              <div className="overflow-y-auto rounded-2xl border border-petal bg-white/82 p-3 shadow-card lg:w-80 lg:self-stretch">
                 <p className="px-2 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-rose">
                   Chapters
                 </p>
@@ -112,6 +101,17 @@ export function ProjectMedia({ project }: { project: Project }) {
                 </ul>
               </div>
             ) : null}
+            <div className="w-fit max-w-full rounded-2xl border border-petal bg-white/82 p-2 shadow-card">
+              <video
+                ref={videoRef}
+                className="block max-h-[34rem] w-auto max-w-full rounded-xl bg-cream object-contain"
+                controls
+                preload="metadata"
+                onError={() => setVideoFailed(true)}
+              >
+                <source src={project.videoDemo} type="video/mp4" />
+              </video>
+            </div>
           </div>
         </div>
       ) : null}
