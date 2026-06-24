@@ -33,7 +33,9 @@ export default function SoftwareEngineerPage() {
         projectOrder={[
           "fitness-app",
           "system-architecture",
+          "midas-core",
           "okta-dashboard",
+          "secure-dev",
           "music-and-notes"
         ]}
       />

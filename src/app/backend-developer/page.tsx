@@ -41,6 +41,8 @@ export default function BackendDeveloperPage() {
         projectOrder={[
           "okta-dashboard",
           "system-architecture",
+          "midas-core",
+          "secure-dev",
           "music-and-notes",
           "fitness-app"
         ]}
