@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { X } from "lucide-react";
 import type { Project } from "@/data/projects";
@@ -10,6 +10,17 @@ export function ProjectMedia({ project }: { project: Project }) {
   const [brokenImages, setBrokenImages] = useState<Set<string>>(new Set());
   const [videoFailed, setVideoFailed] = useState(false);
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const seekTo = (time: number) => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.currentTime = time;
+    void video.play();
+  };
+
+  const formatTime = (s: number) =>
+    `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
 
   const visibleScreenshots = project.screenshots.filter(
     (screenshot) => !brokenImages.has(screenshot.src)
@@ -66,15 +77,41 @@ export function ProjectMedia({ project }: { project: Project }) {
           <h2 className="mb-5 font-display text-3xl font-semibold text-charcoal">
             Demo
           </h2>
-          <div className="w-fit max-w-full rounded-2xl border border-petal bg-white/82 p-2 shadow-card">
-            <video
-              className="block max-h-[34rem] w-auto max-w-full rounded-xl bg-cream object-contain"
-              controls
-              preload="metadata"
-              onError={() => setVideoFailed(true)}
-            >
-              <source src={project.videoDemo} type="video/mp4" />
-            </video>
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
+            <div className="w-fit max-w-full rounded-2xl border border-petal bg-white/82 p-2 shadow-card">
+              <video
+                ref={videoRef}
+                className="block max-h-[34rem] w-auto max-w-full rounded-xl bg-cream object-contain"
+                controls
+                preload="metadata"
+                onError={() => setVideoFailed(true)}
+              >
+                <source src={project.videoDemo} type="video/mp4" />
+              </video>
+            </div>
+            {project.videoChapters && project.videoChapters.length > 0 ? (
+              <div className="rounded-2xl border border-petal bg-white/82 p-3 shadow-card lg:w-64">
+                <p className="px-2 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-rose">
+                  Chapters
+                </p>
+                <ul className="mt-1 space-y-1">
+                  {project.videoChapters.map((chapter) => (
+                    <li key={chapter.time}>
+                      <button
+                        type="button"
+                        onClick={() => seekTo(chapter.time)}
+                        className="flex w-full items-baseline gap-3 rounded-xl px-2 py-2 text-left text-sm text-charcoal transition hover:bg-petal/45"
+                      >
+                        <span className="font-mono text-xs font-semibold text-clay">
+                          {formatTime(chapter.time)}
+                        </span>
+                        <span>{chapter.label}</span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
           </div>
         </div>
       ) : null}

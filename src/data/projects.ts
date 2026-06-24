@@ -20,6 +20,8 @@ export type Project = {
     alt: string;
   }[];
   videoDemo?: string;
+  // time is seconds into the video; clicking a chapter seeks there
+  videoChapters?: { time: number; label: string }[];
   featuredFor: RoleKey[];
   status: string;
 };
@@ -92,6 +94,19 @@ export const projects: Project[] = [
       }
     ],
     videoDemo: "/demos/sdtFitnessApp.mp4",
+    videoChapters: [
+      { time: 15, label: "Weight graph in Quest-Weight" },
+      { time: 20, label: "Steps manual entry" },
+      { time: 21, label: "Creatine Quest + entry" },
+      { time: 35, label: "Start workout" },
+      { time: 39, label: "Select exercises" },
+      { time: 55, label: "Ongoing workout" },
+      { time: 94, label: "Rest timer" },
+      { time: 107, label: "Progress screen" },
+      { time: 118, label: "Completed sessions" },
+      { time: 126, label: "Completed session" },
+      { time: 151, label: "Your routine + reminders" }
+    ],
     repoUrl: "https://github.com/sneri12pic/sdt-fitness-app",
     featuredFor: ["software", "backend", "android"],
     status: "Research-informed Android prototype"
