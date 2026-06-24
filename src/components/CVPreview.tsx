@@ -1,6 +1,5 @@
 import { Download, ExternalLink } from "lucide-react";
 import { Button } from "@/components/Button";
-import { PdfCanvasPreview } from "@/components/PdfCanvasPreview";
 import type { CvKey } from "@/data/cv";
 import { cvs } from "@/data/cv";
 
@@ -28,7 +27,11 @@ export function CVPreview({ cvKey }: { cvKey: CvKey }) {
       </header>
 
       <section className="mt-10 rounded-2xl border border-petal bg-white/82 p-4 shadow-card">
-        <PdfCanvasPreview filePath={cv.previewPath} title={cv.title} />
+        <iframe
+          src={`${cv.previewPath}#view=FitH`}
+          title={`${cv.title} preview`}
+          className="h-[85vh] w-full rounded-xl border border-petal bg-white"
+        />
       </section>
     </div>
   );
