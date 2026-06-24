@@ -6,9 +6,9 @@ const BADGES: Record<string, [string, string?]> = {
   flutter: ["02569B", "flutter"],
   room: ["3DDC84", "android"],
   "health connect": ["34A853", "android"],
-  mvvm: ["6B7280"],
-  "ux research": ["6B7280"],
-  "self-determination theory": ["6B7280"],
+  mvvm: ["c87578"],
+  "ux research": ["c87578"],
+  "self-determination theory": ["c87578"],
   python: ["3776AB", "python"],
   java: ["ED8B00", "openjdk"],
   typescript: ["3178C6", "typescript"],
@@ -25,14 +25,14 @@ const BADGES: Record<string, [string, string?]> = {
   "spring boot": ["6DB33F", "springboot"],
   "spring data jpa": ["6DB33F", "spring"],
   maven: ["C71A36", "apachemaven"],
-  jetty: ["6B7280"],
-  servlets: ["6B7280"],
+  jetty: ["c87578"],
+  servlets: ["c87578"],
   "rest apis": ["111827", "swagger"],
   kafka: ["231F20", "apachekafka"],
-  microservices: ["6B7280"],
+  microservices: ["c87578"],
   "okta oidc": ["007DC1", "okta"],
-  "web security": ["6B7280", "owasp"],
-  "pdf viewer": ["6B7280"],
+  "web security": ["c87578", "owasp"],
+  "pdf viewer": ["c87578"],
   h2: ["1021FF"],
   git: ["F05032", "git"],
   docker: ["2496ED", "docker"],
@@ -41,7 +41,7 @@ const BADGES: Record<string, [string, string?]> = {
 };
 
 function badgeUrl(label: string) {
-  const [color, logo] = BADGES[label.toLowerCase()] ?? ["6B7280"];
+  const [color, logo] = BADGES[label.toLowerCase()] ?? ["c87578"];
   // shields.io: dashes in the label must be escaped as "--".
   const text = encodeURIComponent(label).replace(/-/g, "--");
   const logoPart = logo ? `&logo=${logo}&logoColor=white` : "";
