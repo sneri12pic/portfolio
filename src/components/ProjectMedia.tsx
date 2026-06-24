@@ -24,9 +24,17 @@ export function ProjectMedia({ project }: { project: Project }) {
 
   return (
     <>
-    <section className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
+    <section className="space-y-5">
       <div className="rounded-2xl border border-petal bg-white/82 p-4 shadow-card">
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div
+          className="grid gap-4"
+          style={{
+            gridTemplateColumns: `repeat(${Math.min(
+              Math.max(visibleScreenshots.length, 1),
+              3
+            )}, minmax(0, 1fr))`
+          }}
+        >
           {visibleScreenshots.length > 0 ? (
             visibleScreenshots.map((screenshot) => (
               <motion.figure
@@ -57,17 +65,19 @@ export function ProjectMedia({ project }: { project: Project }) {
           )}
         </div>
       </div>
-      <div className="rounded-2xl border border-petal bg-white/82 p-4 shadow-card">
-        {project.videoDemo && !videoFailed ? (
+      {project.videoDemo && !videoFailed ? (
+        <div className="mx-auto w-fit max-w-full rounded-2xl border border-petal bg-white/82 p-2 shadow-card">
           <video
-            className="max-h-[32rem] w-full rounded-2xl border border-petal bg-cream object-contain"
+            className="block max-h-[34rem] w-auto max-w-full rounded-xl bg-cream object-contain"
             controls
             preload="metadata"
             onError={() => setVideoFailed(true)}
           >
             <source src={project.videoDemo} type="video/mp4" />
           </video>
-        ) : (
+        </div>
+      ) : (
+        <div className="rounded-2xl border border-petal bg-white/82 p-4 shadow-card">
           <div className="flex aspect-video items-center justify-center rounded-2xl border border-dashed border-petal bg-cream p-8 text-center">
             <p className="max-w-sm text-sm leading-6 text-warm-gray">
               {project.videoDemo ? (
@@ -88,8 +98,8 @@ export function ProjectMedia({ project }: { project: Project }) {
               )}
             </p>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </section>
 
     <AnimatePresence>
